@@ -21,7 +21,7 @@ initialize_database:
     - name: "sudo mysql < /srv/salt/secure_installation.sql"
     - target: 'node1-prod'
     - onchanges:
-        - file: configure_galera_node1
+        - file: configure_galera_node1-prod
 
 
 stop_mysqld:
