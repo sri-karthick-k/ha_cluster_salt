@@ -3,6 +3,9 @@ install_mariadb_server:
     - name: mariadb-server
 
 {% set node_data = salt['pillar.get']('galera_nodes') %}
+{% if node_data is not none and node_data is not salt.utils.data.is_dictlike %}
+{% set node_data = {} %}
+{% endif %}
 {% for node, data in node_data.items() %}
 configure_galera_{{ node }}:
   file.managed:
