@@ -26,11 +26,32 @@ master node:
 sudo mkdir -p /srv/salt
 ```
 
+base:
+  'node1-prod':
+    - install_mariadb
+    - galera_config_1
+    - copy_secure_install_file
+    - execute_secure_install
+    - stop_mysql
+    - start_mysql
+
+  'node2-prod':
+    - install_mariadb
+    - galera_config_2
+    - stop_mysql
+    - start_mysql
+  'node3-prod':
+    - install_mariadb
+    - galera_config_3
+    - stop_mysql
+    - start_mysql
+
+
 ```
-# /srv/salt/update_repos.sls
-
-update_repos:
-  pkg.refresh_db
-
+  sudo salt '*' state.apply 
 ```
 
+```
+  sudo salt 'node1-prod' state.apply copy_secure_install_file
+  sudo salt 'node1-prod' state.apply execute_secure_install
+  sudo salt 'node1-prod' cmd.run sudo galera_new_cluster
