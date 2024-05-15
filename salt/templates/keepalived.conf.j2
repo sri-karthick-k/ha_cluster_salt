@@ -1,0 +1,29 @@
+{% set password = salt['pillar.get']('secrets:vrrp_password') %}
+{% set virtual_ip = salt['pillar.get']('virtual_ip') %}
+
+{% set node_data = salt['pillar.get']('load_nodes') %}
+{% if node_data is not none and node_data is mapping %}
+
+{% set minion_id = grains['id'] %}
+
+{% set state = "MASTER" if node_data[minion_id]['is_master'] else "BACKUP" %}
+{% set priority = node_data[minion_id]['priority'] %}
+
+vrrp_instance {{ minion_id }} {
+        state {{ state }}
+        interface enp0s1
+        virtual_router_id 101
+        priority {{ priority }}
+        authentication {
+                auth_type PASS
+                auth_pass {{ password }}
+        }
+
+        virtual_ipaddress {
+                {{ virtual_ip }}
+        }
+
+}
+
+
+{% endif %}

@@ -47,10 +47,15 @@ initialize_database_{{ data['node_name'] }}:
 {% endfor %}
 {% endif %}
 
-stop_mysqld:
-  service.dead:
-    - name: mysqld
-    - enable: True
+#stop_mysqld:
+#  service.dead:
+#    - name: mysqld
+#    - enable: True
+
+/etc/mysql/mariadb.conf.d/60-galera.cnf:
+  file.managed:
+    - source: salt://galera/60-galera.cnf
+    - template: jinja
 
 #start_mysqld:
 #  service.running:

@@ -1,0 +1,10 @@
+listen galera
+    bind *:3306
+    mode tcp
+    balance leastconn
+    option tcpka
+    option mysql-check user haproxy
+    {% for node, data in pillar.get('galera_nodes', {}).items() %}
+    server {{ data.node_name }} {{ data.node_address }}:3306 check weight {{ data.node_weight }}
+    {% endfor %}
+
